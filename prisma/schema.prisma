@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" // o el que uses
+  url      = env("DATABASE_URL")
+}
+
+model Docente {
+  id_docente      Int           @id @default(autoincrement())
+  nombre          String
+  apellido        String
+  email           String  @unique
+  telefono        String?
+  id_especialidad Int
+  especialidad    Especialidad  @relation(fields: [id_especialidad], references: [id_especialidad])
+  materias        Materia[]
+}
+
+model Especialidad {
+  id_especialidad Int         @id @default(autoincrement())
+  nombre          String
+  descripcion     String?
+  docentes        Docente[]
+}
+
+model Materia {
+  id_materia  Int        @id @default(autoincrement())
+  nombre      String
+  descripcion String?
+  id_docente  Int
+  id_carrera  Int
+  id_ciclo    Int
+
+  docente     Docente    @relation(fields: [id_docente], references: [id_docente])
+  carrera     Carrera    @relation(fields: [id_carrera], references: [id_carrera])
+  ciclo       Ciclo      @relation(fields: [id_ciclo], references: [id_ciclo])
+}
+
+model Estudiante {
+  id_estudiante Int      @id @default(autoincrement())
+  nombre        String
+  apellido      String
+  email         String  @unique
+  id_carrera    Int
+  id_ciclo      Int
+
+  carrera       Carrera   @relation(fields: [id_carrera], references: [id_carrera])
+  ciclo         Ciclo     @relation(fields: [id_ciclo], references: [id_ciclo])
+}
+
+model Carrera {
+  id_carrera Int          @id @default(autoincrement())
+  nombre     String
+  duracion   String
+  materias   Materia[]
+  estudiantes Estudiante[]
+}
+
+model Ciclo {
+  id_ciclo     Int          @id @default(autoincrement())
+  nombre       String
+  descripcion  String?
+  materias     Materia[]
+  estudiantes  Estudiante[]
+}
