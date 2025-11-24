@@ -7,61 +7,62 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Docente {
-  id_docente      Int           @id @default(autoincrement())
-  nombre          String
-  apellido        String
-  email           String  @unique
-  telefono        String?
-  id_especialidad Int
-  especialidad    Especialidad  @relation(fields: [id_especialidad], references: [id_especialidad])
-  materias        Materia[]
+model Teacher {
+  id_teacher      Int           @id @default(autoincrement())
+  first_name      String
+  last_name       String
+  email           String        @unique
+  phone           String?
+  id_specialty    Int
+  specialty       Specialty     @relation(fields: [id_specialty], references: [id_specialty])
+  subjects        Subject[]
 }
 
-model Especialidad {
-  id_especialidad Int         @id @default(autoincrement())
-  nombre          String
-  descripcion     String?
-  docentes        Docente[]
+model Specialty {
+  id_specialty    Int           @id @default(autoincrement())
+  name            String
+  description     String?
+  teachers        Teacher[]
 }
 
-model Materia {
-  id_materia  Int        @id @default(autoincrement())
-  nombre      String
-  descripcion String?
-  id_docente  Int
-  id_carrera  Int
-  id_ciclo    Int
-
-  docente     Docente    @relation(fields: [id_docente], references: [id_docente])
-  carrera     Carrera    @relation(fields: [id_carrera], references: [id_carrera])
-  ciclo       Ciclo      @relation(fields: [id_ciclo], references: [id_ciclo])
+model Subject {
+  id_subject      Int           @id @default(autoincrement())
+  name            String
+  description     String?
+  id_teacher      Int
+  id_career       Int
+  id_cycle        Int
+  
+  teacher         Teacher       @relation(fields: [id_teacher], references: [id_teacher])
+  career          Career        @relation(fields: [id_career], references: [id_career])
+  cycle           Cycle         @relation(fields: [id_cycle], references: [id_cycle])
 }
 
-model Estudiante {
-  id_estudiante Int      @id @default(autoincrement())
-  nombre        String
-  apellido      String
-  email         String  @unique
-  id_carrera    Int
-  id_ciclo      Int
-
-  carrera       Carrera   @relation(fields: [id_carrera], references: [id_carrera])
-  ciclo         Ciclo     @relation(fields: [id_ciclo], references: [id_ciclo])
+model Student {
+  id_student      Int           @id @default(autoincrement())
+  first_name      String
+  last_name       String
+  email           String        @unique
+  id_career       Int
+  id_cycle        Int
+  
+  career          Career        @relation(fields: [id_career], references: [id_career])
+  cycle           Cycle         @relation(fields: [id_cycle], references: [id_cycle])
 }
 
-model Carrera {
-  id_carrera Int          @id @default(autoincrement())
-  nombre     String
-  duracion   String
-  materias   Materia[]
-  estudiantes Estudiante[]
+model Career {
+  id_career       Int           @id @default(autoincrement())
+  name            String
+  duration        String
+  totalCycles     String
+  subjects        Subject[]
+  students        Student[]
 }
 
-model Ciclo {
-  id_ciclo     Int          @id @default(autoincrement())
-  nombre       String
-  descripcion  String?
-  materias     Materia[]
-  estudiantes  Estudiante[]
+model Cycle {
+  id_cycle        Int           @id @default(autoincrement())
+  name            String
+  description     String?
+  subjects        Subject[]
+  students        Student[]
 }
