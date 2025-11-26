@@ -1,6 +1,5 @@
 import { ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Prisma } from 'generated/prisma';
 import { PaginationDto } from 'src/pagination/pagination.dto';
 import { CreateSpecialtyDto } from './dto/create-specialty.dto';
 import { UpdateSpecialtyDto } from './dto/update-specialty.dto'; 
@@ -39,10 +38,8 @@ export class SpecialtyService {
         throw error;
       }
 
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
-          throw new ConflictException('Specialty with this name already exists');
-        }
+      if (error.code === 'P2002') {
+        throw new ConflictException('Specialty with this name already exists');
       }
 
       throw new InternalServerErrorException('Error creating specialty');

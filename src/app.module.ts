@@ -9,10 +9,12 @@ import { StudentModule } from './student/student.module';
 import { CycleModule } from './cycle/cycle.module';
 import { SpecialtyModule } from './specialty/specialty.module';
 import { CareerModule } from './career/career.module';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
   imports: [
+    AuthModule,
     SubjectModule,
     CycleModule,
     TeacherModule,

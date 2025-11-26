@@ -1,4 +1,4 @@
-import { IsEmail, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsEmail, IsNumber, IsOptional, IsString, MinLength } from "class-validator";
 
 export class CreateTeacherDto {
     @IsString()
@@ -9,6 +9,10 @@ export class CreateTeacherDto {
     email: string;
     @IsOptional()
     phone?: string;
+    @IsOptional()
+    @IsString()
+    @MinLength(6)
+    password?: string;
     @IsNumber()
     id_specialty: number;
 }

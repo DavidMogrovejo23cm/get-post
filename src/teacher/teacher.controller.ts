@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
 import { TeacherService } from './teacher.service';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
 import { PaginationDto } from 'src/pagination/pagination.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('teacher')
 export class TeacherController {
@@ -14,11 +15,13 @@ export class TeacherController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   findAll(@Query()findWithPagination: PaginationDto) {
     return this.teacherService.findAll(findWithPagination);
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   findOne(@Param('id') id: string) {
     return this.teacherService.findOne(+id);
   }

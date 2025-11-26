@@ -3,6 +3,7 @@ import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PaginationDto } from 'src/pagination/pagination.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class TeacherService {
@@ -25,11 +26,17 @@ export class TeacherService {
         throw new ConflictException('Teacher already exists');
       }
 
+      // Hash de la contraseña si se proporciona
+      let hashedPassword = createTeacherDto.password 
+        ? await bcrypt.hash(createTeacherDto.password, 10)
+        : await bcrypt.hash('default_password_123', 10); // Contraseña por defecto si no se proporciona
+
       const teacher = await this.prisma.teacher.create({
         data: {
           first_name: createTeacherDto.first_name,
           last_name: createTeacherDto.last_name,
           email: createTeacherDto.email,
+          password: hashedPassword,
           phone: createTeacherDto.phone,
           id_specialty: createTeacherDto.id_specialty,
         },
